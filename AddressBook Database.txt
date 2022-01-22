@@ -1,0 +1,246 @@
+MYSQL - AddressBookSystem Database
+
+/**UC-1:Ability to create a Address Book Service DB**/
+
+mysql> CREATE DATABASE Addressbooks_service;
+Query OK, 1 row affected (0.15 sec)
+
+mysql> USE Addressbooks_service;
+Database changed
+
+mysql> SELECT DATABASE();
++----------------------+
+| DATABASE()           |
++----------------------+
+| addressbooks_service |
++----------------------+
+1 row in set (0.00 sec)
+
+/**UC-2:Ability to create a Address Book Table with first and last names, address, city,state, zip, phone number and email as its attributes**/
+
+mysql> CREATE TABLE addressbook
+    -> (
+    -> id INT NOT NULL AUTO_INCREMENT,
+    -> Firstname VARCHAR(50) NOT NULL,
+    -> Lastname VARCHAR(50) NOT NULL,
+    -> Address VARCHAR(100) NOT NULL,
+    -> city VARCHAR(30) NOT NULL,
+    -> State VARCHAR(30) NOT NULL,
+    -> ZIPCODE INT(6) NOT NULL,
+    -> Phonenumber VARCHAR(13) NOT NULL,
+    -> email VARCHAR(50) NOT NULL,
+    -> PRIMARY KEY (id)
+    -> );
+Query OK, 0 rows affected, 1 warning (2.52 sec)
+
+/**UC-3:Ability to insert new Contacts to AddressBook**/
+
+mysql> INSERT INTO addressbook(Firstname, Lastname, Address, city, State, ZIPCODE, Phonenumber, email)VALUES
+    -> ('Lokesh', 'Kotte', 'Perala', 'Chirala', 'AP', '523157', '7995717289', 'kottelokesh789@gmail.com'),
+    -> ('Hema', 'Koti', 'Perala', 'Chirala', 'AP', '523157', '7995817289', 'hema@gmail.com'),
+    -> ('Sneha', 'Koti', 'Perala', 'Chirala', 'AP', '523157', '7995817249', 'sneha@gmail.com');,
+Query OK, 3 rows affected (0.32 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+    -> SELECT * FROM addressbook;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',
+SELECT * FROM addressbook' at line 1
+mysql> SELECT * FROM addressbook;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com |
+|  2 | Hema      | Koti     | Perala  | Chirala | AP    |  523157 | 7995817289  | hema@gmail.com           |
+|  3 | Sneha     | Koti     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+3 rows in set (0.06 sec)
+
+/**UC-4:Ability to edit existing contact person using their name**/
+
+mysql> UPDATE addressbook SET Lastname = 'Goli' WHERE Firstname ='Sneha';
+Query OK, 1 row affected (0.16 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM addressbook;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com |
+|  2 | Hema      | Koti     | Perala  | Chirala | AP    |  523157 | 7995817289  | hema@gmail.com           |
+|  3 | Sneha     | Goli     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+3 rows in set (0.04 sec)
+
+mysql>
+
+/**UC-5:Ability to delete a person using person's name**/
+
+mysql> DELETE FROM addressbook WHERE Firstname = 'Hema';
+Query OK, 1 row affected (0.11 sec)
+
+mysql> SELECT * FROM addressbook;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com |
+|  3 | Sneha     | Goli     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+2 rows in set (0.04 sec)
+
+/**UC-6Ability to Retrieve Person belonging to a City or State from the Address Book**/
+
+mysql> SELECT Firstname,Lastname FROM addressbook WHERE State = 'AP';
++-----------+----------+
+| Firstname | Lastname |
++-----------+----------+
+| Lokesh    | Kotte    |
+| Sneha     | Goli     |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+/**UC-7:Ability to understand the size of address book by City and State**/
+
+mysql> SELECT COUNT(*) FROM addressbook GROUP BY city AND State;
++----------+
+| COUNT(*) |
++----------+
+|        2 |
++----------+
+1 row in set, 3 warnings (0.03 sec)
+
+/**Ability to retrieve entries sorted alphabetically by Person’s name for a given city**/
+
+mysql> SELECT * FROM addressbook;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com |
+|  3 | Sneha     | Goli     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          |
+|  4 | Hema      | Koti     | Perala  | Chirala | AP    |  523157 | 7995817289  | hema@gmail.com           |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+3 rows in set (0.02 sec)
+
+mysql> SELECT * FROM addressbook where city= 'Chirala' ORDER BY Firstname ;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+|  4 | Hema      | Koti     | Perala  | Chirala | AP    |  523157 | 7995817289  | hema@gmail.com           |
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com |
+|  3 | Sneha     | Goli     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+3 rows in set (0.04 sec)
+
+mysql> SELECT * FROM addressbook where city= 'Chirala' ORDER BY Firstname DESC;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+|  3 | Sneha     | Goli     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          |
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com |
+|  4 | Hema      | Koti     | Perala  | Chirala | AP    |  523157 | 7995817289  | hema@gmail.com           |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+
+3 rows in set (0.00 sec)
+
+/**UC-9:Ability To identify each AddressBook with name and type**/
+
+mysql> ALTER TABLE addressbook
+    -> ADD type VARCHAR(55);
+Query OK, 0 rows affected (0.80 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE addressbook SET addressbookname= 'first' WHERE Firstname= 'Lokesh';
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook SET addressbookname= 'second' WHERE Firstname= 'Sneha';
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook SET addressbookname= 'third' WHERE Firstname= 'Hema';
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook SET type= 'family' WHERE Firstname= 'Hema';
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook SET type= 'friend' WHERE Firstname= 'Sneha';
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook SET type= 'profession' WHERE Firstname= 'Lokesh';
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM addressbook;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    | addressbookname | type       |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com | first           | profession |
+|  3 | Sneha     | Goli     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          | second          | friend     |
+|  4 | Hema      | Koti     | Perala  | Chirala | AP    |  523157 | 7995817289  | hema@gmail.com           | third           | family     |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+3 rows in set (0.03 sec)
+
+/**UC-10:Ability to get number of contact persons i.e. count by type**/
+
+mysql> SELECT * FROM addressbook;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    | addressbookname | type       |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com | first           | profession |
+|  3 | Sneha     | Goli     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          | second          | friend     |
+|  4 | Hema      | Koti     | Perala  | Chirala | AP    |  523157 | 7995817289  | hema@gmail.com           | third           | family     |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+3 rows in set (0.03 sec)
+
+mysql> SELECT COUNT(type) FROM addressbook GROUP BY type;
++-------------+
+| COUNT(type) |
++-------------+
+|           1 |
+|           1 |
+|           1 |
++-------------+
+3 rows in set (0.08 sec)
+
+/**UC-11:Ability to add person to both Friend and Family**/
+
+mysql> INSERT INTO addressbook(Firstname, Lastname, Address, city, State, ZIPCODE, Phonenumber, email, addressbookname, type) VALUES
+    -> ('Lucky', 'Rachi', 'Kuna', 'Chirala', 'AP', '523157', '7232717289', 'lucky789@gmail.com', 'third', 'family');
+Query OK, 1 row affected (0.19 sec)
+
+mysql> INSERT INTO addressbook(Firstname, Lastname, Address, city, State, ZIPCODE, Phonenumber, email, addressbookname, type) VALUES
+    -> ('Ram', 'Machi', 'Konda', 'Chirala', 'AP', '523157', '7232717289', 'ram789@gmail.com', 'second', 'friend');
+Query OK, 1 row affected (0.14 sec)
+
+mysql> SELECT * FROM addressbook;
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+| id | Firstname | Lastname | Address | city    | State | ZIPCODE | Phonenumber | email                    | addressbookname | type       |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+|  1 | Lokesh    | Kotte    | Perala  | Chirala | AP    |  523157 | 7995717289  | kottelokesh789@gmail.com | first           | profession |
+|  3 | Sneha     | Goli     | Perala  | Chirala | AP    |  523157 | 7995817249  | sneha@gmail.com          | second          | friend     |
+|  4 | Hema      | Koti     | Perala  | Chirala | AP    |  523157 | 7995817289  | hema@gmail.com           | third           | family     |
+|  5 | Lucky     | Rachi    | Kuna    | Chirala | AP    |  523157 | 7232717289  | lucky789@gmail.com       | third           | family     |
+|  6 | Ram       | Machi    | Konda   | Chirala | AP    |  523157 | 7232717289  | ram789@gmail.com         | second          | friend     |
++----+-----------+----------+---------+---------+-------+---------+-------------+--------------------------+-----------------+------------+
+5 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
